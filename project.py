@@ -5,7 +5,7 @@ import re
 import datetime
 
 # Set dates
-start = datetime.datetime(2000, 6, 1)
+start = datetime.datetime(2018, 6, 1)
 end = datetime.datetime(2019, 6, 1)
 
 # Get Stock Codes and Risk Free Rate
@@ -16,7 +16,9 @@ stock_code_1 = raw_input("Stock code name 1: ")
 while True:
     try:
         df = pdr.DataReader(stock_code_1, 'yahoo', start, end)
-        df = df.groupby(pd.Grouper(freq='Y')).mean()
+
+        # Uncomment and change if you want weekly, monthly or yearly returns
+        df = df.groupby(pd.Grouper(freq='M')).mean()
         stock_1 = df['Adj Close']
     except pdr._utils.RemoteDataError:
         stock_code_1 = raw_input("Enter a valid code for Stock 1: ")
@@ -28,7 +30,9 @@ stock_code_2 = raw_input("Stock code name 2: ")
 while True:
     try:
         df = pdr.DataReader(stock_code_2, 'yahoo', start, end)
-        df = df.groupby(pd.Grouper(freq='Y')).mean()
+
+        # Uncomment and change if you want weekly, monthly or yearly returns
+        df = df.groupby(pd.Grouper(freq='M')).mean()
         stock_2 = df['Adj Close']
     except pdr._utils.RemoteDataError:
         stock_code_2 = raw_input("Enter a valid code for Stock 2: ")
@@ -39,27 +43,31 @@ risk_free_string = raw_input("Risk Free Rate (in percentage form ex. 5.25%): ")
 risk_free_rate = float(re.findall(r'(\d+(\.\d+)?%)', risk_free_string)[0][0].rstrip("%"))/100.0000
 
 # Calculate returns for both stocks
-returns_1 = []
-returns_2 = []
+returns_monthly_1 = []
+returns_monthly_2 = []
+returns_annual_1 = 0
+returns_annual_2 = 0
 
 row = 0
 for x in range(len(stock_1) - 1):
-    returns_1.append(stock_1[row+1]/stock_1[row]-1)
-    returns_2.append(stock_2[row+1]/stock_2[row]-1)
+    returns_monthly_1.append(stock_1[row+1]/stock_1[row]-1)
+    returns_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
+    returns_monthly_2.append(stock_2[row+1]/stock_2[row]-1)
+    returns_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
     row = row + 1
 
 # Calculate statistics for returns
-average_return_1 = np.average(returns_1)
-average_return_2 = np.average(returns_2)
+average_return_1 = np.average(returns_monthly_1)
+average_return_2 = np.average(returns_monthly_2)
 
-variance_1 = np.var(returns_1)
-variance_2 = np.var(returns_2)
+variance_1 = np.var(returns_monthly_1)
+variance_2 = np.var(returns_monthly_2)
 
-stdev_1 = np.std(returns_1)
-stdev_2 = np.std(returns_2)
+stdev_1 = np.std(returns_monthly_1)
+stdev_2 = np.std(returns_monthly_2)
 
-covariance = np.cov(returns_1, returns_2)[0][1]
-
+covariance = np.cov(returns_monthly_1, returns_monthly_2)[0][1]
+covariance_annual = covariance * 12
 # Min Variance Portfolio
 
 proportion_1 = (variance_2 - covariance)/(variance_1 + variance_2 - 2*covariance)
