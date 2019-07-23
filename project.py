@@ -5,7 +5,7 @@ import re
 import datetime
 
 # Set dates
-start = datetime.datetime(2018, 6, 1)
+start = datetime.datetime(2000, 6, 1)
 end = datetime.datetime(2019, 6, 1)
 
 # Get Stock Codes and Risk Free Rate
@@ -16,6 +16,7 @@ stock_code_1 = raw_input("Stock code name 1: ")
 while True:
     try:
         df = pdr.DataReader(stock_code_1, 'yahoo', start, end)
+        df = df.groupby(pd.Grouper(freq='Y')).mean()
         stock_1 = df['Adj Close']
     except pdr._utils.RemoteDataError:
         stock_code_1 = raw_input("Enter a valid code for Stock 1: ")
@@ -27,6 +28,7 @@ stock_code_2 = raw_input("Stock code name 2: ")
 while True:
     try:
         df = pdr.DataReader(stock_code_2, 'yahoo', start, end)
+        df = df.groupby(pd.Grouper(freq='Y')).mean()
         stock_2 = df['Adj Close']
     except pdr._utils.RemoteDataError:
         stock_code_2 = raw_input("Enter a valid code for Stock 2: ")
@@ -57,7 +59,6 @@ stdev_1 = np.std(returns_1)
 stdev_2 = np.std(returns_2)
 
 covariance = np.cov(returns_1, returns_2)[0][1]
-print covariance
 
 # Min Variance Portfolio
 
@@ -100,7 +101,7 @@ for x in range(0, 10000):
         max_w2 = w_2
 
 max_return = (max_w1 * average_return_1 + max_w2 * average_return_2)
-max_variance = np.sqrt(max_w1 ** 2 * variance_1 + max_w2 ** 2 * variance_2 + 2 * max_w1 * max_w2 * covariance)
+max_risk = np.sqrt(max_w1 ** 2 * variance_1 + max_w2 ** 2 * variance_2 + 2 * max_w1 * max_w2 * covariance)
 
 print ''
 print 'Case 1: '
@@ -113,8 +114,8 @@ print ('\tMarket portfolio proportion {}: {:.3f}%').format(stock_code_1, max_w1 
 print ('\tMarket portfolio proportion {}: {:.3f}%').format(stock_code_2, max_w2 * 100.00)
 #print '\tMarket portfolio expected return: ', max_return * 10000/100.00, "%"
 print ('\tMarket portfolio expected return: {:.3f}%').format(max_return * 100.00)
-#print '\tMarket portfolio standard deviation: ', max_variance * 10000/100.00, "%"
-print ('\tMarket portfolio standard deviation: {:.3f}%').format(max_variance * 100.00)
+#print '\tMarket portfolio standard deviation: ', max_risk * 10000/100.00, "%"
+print ('\tMarket portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk) * 100.00)
 
 print ''
 print 'Case 2: '
@@ -122,8 +123,8 @@ print '\tGiven-Proportion invested in risk-free asset: 50%'
 print '\tGiven-Proportion invested in market portfolio: 50%'
 #print '\tPortfolio expected return: ', (0.5 * max_return + 0.5 * risk_free_rate) * 10000/100.00, "%"
 print ('\tPortfolio expected return: {:.3f}%').format((0.5 * max_return + 0.5 * risk_free_rate) * 100.00)
-#print '\tPortfolio standard deviation: ', (0.5 * np.sqrt(max_variance))* 10000/100.00, "%"
-print ('\tPortfolio standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_variance)) * 100.00)
+#print '\tPortfolio standard deviation: ', (0.5 * np.sqrt(max_risk))* 10000/100.00, "%"
+print ('\tPortfolio standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_risk)) * 100.00)
 
 print ''
 print 'Case 3: '
@@ -131,5 +132,5 @@ print '\tGiven-Proportion invested in risk-free asset: -50%'
 print '\tGiven-Proportion invested in market portfolio: 150%'
 #print '\tPortfolio expected return: ', (-0.5 * risk_free_rate + 1.5 * max_return) * 10000/100.00, "%"
 print ('\tPortfolio expected return: {:.3f}%').format((-0.5 * risk_free_rate + 1.5 * max_return) * 100.00)
-#print '\tPortfolio standard deviation: ', (1.5 * np.sqrt(max_variance))* 10000/100.00, "%"
-print ('\tPortfolio standard deviation: {:.3f}%').format((1.5 * np.sqrt(max_variance)) * 100.00)
+#print '\tPortfolio standard deviation: ', (1.5 * np.sqrt(max_risk))* 10000/100.00, "%"
+print ('\tPortfolio standard deviation: {:.3f}%').format((1.5 * np.sqrt(max_risk)) * 100.00)
