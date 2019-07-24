@@ -63,14 +63,24 @@ average_return_2 = np.average(returns_monthly_2)
 variance_1 = np.var(returns_monthly_1)
 variance_2 = np.var(returns_monthly_2)
 
+#print variance_1
+#print variance_2
+
 stdev_1 = np.std(returns_monthly_1)
 stdev_2 = np.std(returns_monthly_2)
 
 covariance = np.cov(returns_monthly_1, returns_monthly_2)[0][1]
 covariance_annual = covariance * 12
+
+#print covariance
+
 # Min Variance Portfolio
 
 proportion_1 = (variance_2 - covariance)/(variance_1 + variance_2 - 2*covariance)
+if(proportion_1 > 1):
+    proportion_1 = 1;
+if(proportion_1 < 0):
+    proportion_1 = 0;
 proportion_2 = (1 - proportion_1)
 
 mvp_return = proportion_1 * average_return_1 + proportion_2 * average_return_2
