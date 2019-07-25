@@ -84,9 +84,6 @@ stdev_annual_2  = np.sqrt(variance_annual_2)
 covariance_monthly = covariances_monthly[0][1]
 covariance_annual = covariances_annual[0][1]
 
-print covariance_monthly*12
-print covariance_annual
-
 #print covariance
 
 # Min Variance Portfolio
