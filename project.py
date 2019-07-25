@@ -59,8 +59,8 @@ for x in range(len(stock_1) - 1):
     returns_monthly_2.append(stock_2[row+1]/stock_2[row]-1)
     row = row + 1
 
-returns_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
-returns_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
+average_returns_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
+average_returns_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
 
 # Calculate statistics for returns
 average_return_monthly_1 = np.average(returns_monthly_1)
