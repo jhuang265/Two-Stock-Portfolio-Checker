@@ -40,51 +40,65 @@ while True:
     break
 
 risk_free_string = raw_input("Risk Free Rate (in percentage form ex. 5.25%): ")
-risk_free_rate = float(re.findall(r'(\d+(\.\d+)?%)', risk_free_string)[0][0].rstrip("%"))/100.0000
+
+while True:
+    try:
+        risk_free_rate = float(re.findall(r'(\d+(\.\d+)?%)', risk_free_string)[0][0].rstrip("%"))/100.0000
+    except IndexError:
+        risk_free_string = raw_input("Please enter a percentage value of the form X.XX%: ")
+        continue
+    break
+#risk_free_rate = float(re.findall(r'(\d+(\.\d+)?%)', risk_free_string)[0][0].rstrip("%"))/100.0000
 
 # Calculate returns for both stocks
 returns_monthly_1 = []
 returns_monthly_2 = []
-returns_annual_1 = 0
-returns_annual_2 = 0
+returns_annual_1 = []
+returns_annual_2 = []
 
 row = 0
 for x in range(len(stock_1) - 1):
     returns_monthly_1.append(stock_1[row+1]/stock_1[row]-1)
-    returns_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
+    returns_annual_1.append((stock_1[row+1]/stock_1[row])**12 - 1)
     returns_monthly_2.append(stock_2[row+1]/stock_2[row]-1)
-    returns_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
+    returns_annual_2.append((stock_2[row+1]/stock_2[row])**12 - 1)
     row = row + 1
 
 # Calculate statistics for returns
-average_return_1 = np.average(returns_monthly_1)
-average_return_2 = np.average(returns_monthly_2)
+average_return_monthly_1 = np.average(returns_monthly_1)
+average_return_monthly_2 = np.average(returns_monthly_2)
+average_return_annual_1 = np.average(returns_annual_1)
+average_return_annual_2 = np.average(returns_annual_2)
 
-variance_1 = np.var(returns_monthly_1)
-variance_2 = np.var(returns_monthly_2)
+variance_monthly_1 = np.var(returns_monthly_1)
+variance_monthly_2 = np.var(returns_monthly_2)
+variance_annual_1 = np.var(returns_annual_1)
+variance_annual_2 = np.var(returns_annual_2)
 
 #print variance_1
 #print variance_2
 
-stdev_1 = np.std(returns_monthly_1)
-stdev_2 = np.std(returns_monthly_2)
+stdev_monthly_1 = np.std(returns_monthly_1)
+stdev_monthly_2 = np.std(returns_monthly_2)
+stdev_monthly_1 = np.std(returns_monthly_1)
+stdev_monthly_2 = np.std(returns_monthly_2)
 
-covariance = np.cov(returns_monthly_1, returns_monthly_2)[0][1]
-covariance_annual = covariance * 12
+covariance_monthly = np.cov(returns_monthly_1, returns_monthly_2)[0][1]
+covariance_annual = np.cov(returns_annual_1, returns_annual_2)[0][1]
 
 #print covariance
 
 # Min Variance Portfolio
 
-proportion_1 = (variance_2 - covariance)/(variance_1 + variance_2 - 2*covariance)
+proportion_1 = (variance_monthly_2 - covariance_monthly)/(variance_monthly_1 + variance_monthly_2 - 2*covariance_monthly)
 if(proportion_1 > 1):
     proportion_1 = 1;
 if(proportion_1 < 0):
     proportion_1 = 0;
 proportion_2 = (1 - proportion_1)
 
-mvp_return = proportion_1 * average_return_1 + proportion_2 * average_return_2
-mvp_risk = np.sqrt(proportion_1**2 * variance_1 + proportion_2**2 * variance_2 + 2 * proportion_1 * proportion_2 * covariance)
+mvp_return = proportion_1 * average_return_monthly_1 + proportion_2 * average_return_monthly_2
+mvp_risk = np.sqrt(proportion_1**2 * variance_monthly_1 + proportion_2**2 * variance_monthly_2 + 2 * proportion_1 * proportion_2 * covariance_monthly)
 
 print ''
 print 'Minimum Variance Portfolio: '
@@ -102,24 +116,24 @@ print('\tMVP standard portfolio return: {:.3f}%').format(mvp_return * 100.00)
 w_1 = 0.0
 w_2 = 1.0
 
-max_r = (w_1 * average_return_1 + w_2 * average_return_2 - risk_free_rate) / np.sqrt(w_1**2 * variance_1 + w_2**2 * variance_2 + 2 * w_1 * w_2 * covariance)
+max_r = (w_1 * average_return_monthly_1 + w_2 * average_return_monthly_2 - risk_free_rate) / np.sqrt(w_1**2 * variance_monthly_1 + w_2**2 * variance_monthly_2 + 2 * w_1 * w_2 * covariance_monthly)
 max_w1 = 0.0
 max_w2 = 1
 
 for x in range(0, 10000):
     w_1 = w_1 + 0.0001
     w_2 = w_2 - 0.0001
-    e_rp = w_1 * average_return_1 + w_2 * average_return_2
+    e_rp = w_1 * average_return_monthly_1 + w_2 * average_return_monthly_2
     excess_return = e_rp - risk_free_rate
-    sharpe_ratio = excess_return / np.sqrt(w_1**2 * variance_1 + w_2**2 * variance_2 + 2 * w_1 * w_2 * covariance)
+    sharpe_ratio = excess_return / np.sqrt(w_1**2 * variance_monthly_1 + w_2**2 * variance_monthly_2 + 2 * w_1 * w_2 * covariance_monthly)
 
     if(sharpe_ratio > max_r):
         max_r = sharpe_ratio
         max_w1 = w_1
         max_w2 = w_2
 
-max_return = (max_w1 * average_return_1 + max_w2 * average_return_2)
-max_risk = np.sqrt(max_w1 ** 2 * variance_1 + max_w2 ** 2 * variance_2 + 2 * max_w1 * max_w2 * covariance)
+max_return = (max_w1 * average_return_monthly_1 + max_w2 * average_return_monthly_2)
+max_risk = np.sqrt(max_w1 ** 2 * variance_monthly_1 + max_w2 ** 2 * variance_monthly_2 + 2 * max_w1 * max_w2 * covariance_monthly)
 
 print ''
 print 'Case 1: '
