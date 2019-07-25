@@ -52,38 +52,40 @@ while True:
 # Calculate returns for both stocks
 returns_monthly_1 = []
 returns_monthly_2 = []
-returns_annual_1 = []
-returns_annual_2 = []
 
 row = 0
 for x in range(len(stock_1) - 1):
     returns_monthly_1.append(stock_1[row+1]/stock_1[row]-1)
-    returns_annual_1.append((stock_1[row+1]/stock_1[row])**12 - 1)
     returns_monthly_2.append(stock_2[row+1]/stock_2[row]-1)
-    returns_annual_2.append((stock_2[row+1]/stock_2[row])**12 - 1)
     row = row + 1
+
+returns_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
+returns_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
 
 # Calculate statistics for returns
 average_return_monthly_1 = np.average(returns_monthly_1)
 average_return_monthly_2 = np.average(returns_monthly_2)
-average_return_annual_1 = np.average(returns_annual_1)
-average_return_annual_2 = np.average(returns_annual_2)
 
 variance_monthly_1 = np.var(returns_monthly_1)
 variance_monthly_2 = np.var(returns_monthly_2)
-variance_annual_1 = np.var(returns_annual_1)
-variance_annual_2 = np.var(returns_annual_2)
-
-#print variance_1
-#print variance_2
 
 stdev_monthly_1 = np.std(returns_monthly_1)
 stdev_monthly_2 = np.std(returns_monthly_2)
-stdev_monthly_1 = np.std(returns_monthly_1)
-stdev_monthly_2 = np.std(returns_monthly_2)
 
-covariance_monthly = np.cov(returns_monthly_1, returns_monthly_2)[0][1]
-covariance_annual = np.cov(returns_annual_1, returns_annual_2)[0][1]
+covariances_monthly = np.cov(returns_monthly_1, returns_monthly_2)
+covariances_annual = covariances_monthly * 12
+
+variance_annual_1 = covariances_annual[0][0]
+variance_annual_2 = covariances_annual[1][1]
+
+stdev_annual_1  = np.sqrt(variance_annual_1)
+stdev_annual_2  = np.sqrt(variance_annual_2)
+
+covariance_monthly = covariances_monthly[0][1]
+covariance_annual = covariances_annual[0][1]
+
+print covariance_monthly*12
+print covariance_annual
 
 #print covariance
 
