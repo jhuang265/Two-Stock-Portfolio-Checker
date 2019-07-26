@@ -98,6 +98,17 @@ proportion_2 = (1 - proportion_1)
 mvp_return = proportion_1 * average_return_monthly_1 + proportion_2 * average_return_monthly_2
 mvp_risk = np.sqrt(proportion_1**2 * variance_monthly_1 + proportion_2**2 * variance_monthly_2 + 2 * proportion_1 * proportion_2 * covariance_monthly)
 
+proportion_annual_1 = (variance_annual_2 - covariance_annual)/(variance_annual_1 + variance_annual_2 - 2*covariance_annual)
+if(proportion_annual_1 > 1):
+    proportion_annual_1 = 1;
+if(proportion_annual_1 < 0):
+    proportion_annual_1 = 0;
+proportion_annual_2 = (1 - proportion_annual_1)
+
+mvp_return_annual = proportion_annual_1 * average_return_annual_1 + proportion_annual_2 * average_return_annual_2
+mvp_risk_annual = np.sqrt(proportion_annual_1**2 * variance_annual_1 + proportion_annual_2**2 * variance_annual_2 + 2 * proportion_annual_1 * proportion_annual_2 * covariance_annual)
+
+
 print ''
 print 'Minimum Variance Portfolio: '
 #print '\tMVP proportion ', stock_code_1, ': ', proportion_1 * 10000/100.00, '%'
@@ -105,9 +116,13 @@ print('\tMVP proportion {}: {:.3f}%').format(stock_code_1, proportion_1 * 100.00
 #print '\tMVP proportion ', stock_code_2, ': ', proportion_2 * 10000/100.00, '%'
 print('\tMVP proportion {}: {:.3f}%').format(stock_code_2, proportion_2 * 100.00)
 #print '\tMVP standard deviation: ', mvp_risk * 10000/100.00, '%'
-print('\tMVP standard deviation: {:.3f}%').format(mvp_risk * 100.00)
+print('\tMVP monthly standard deviation: {:.3f}%').format(mvp_risk * 100.00)
 #print '\tMVP expected portfolio return: ', mvp_return * 10000/100.00, '%'
-print('\tMVP standard portfolio return: {:.3f}%').format(mvp_return * 100.00)
+print('\tMVP monthly standard portfolio return: {:.3f}%').format(mvp_return * 100.00)
+print('\tMVP annual standard deviation: {:.3f}%').format(mvp_risk_annual * 100.00)
+#print '\tMVP expected portfolio return: ', mvp_return * 10000/100.00, '%'
+print('\tMVP annual standard portfolio return: {:.3f}%').format(mvp_return_annual * 100.00)
+
 
 # Maximize Sharpre Ratio
 
