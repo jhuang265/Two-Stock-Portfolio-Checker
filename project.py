@@ -40,7 +40,7 @@ while True:
     break
 
 # Get risk-free rate from input
-risk_free_string = raw_input("Risk Free Rate (in percentage form ex. 5.25%): ")
+risk_free_string = raw_input("Risk Free Rate (Annual) (in percentage form ex. 5.25%): ")
 while True:
     try:
         risk_free_rate = float(re.findall(r'(\d+(\.\d+)?%)', risk_free_string)[0][0].rstrip("%"))/100.0000
@@ -48,6 +48,8 @@ while True:
         risk_free_string = raw_input("Please enter a percentage value of the form X.XX%: ")
         continue
     break
+
+risk_free_rate_monthly = np.power([risk_free_rate+1], [1.0/12.0])[0] -1;
 
 # Calculate returns for both stocks
 returns_monthly_1 = []
@@ -59,8 +61,8 @@ for x in range(len(stock_1) - 1):
     returns_monthly_2.append(stock_2[row+1]/stock_2[row]-1)
     row = row + 1
 
-average_returns_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
-average_returns_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
+average_return_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
+average_return_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
 
 # Calculate statistics for returns
 average_return_monthly_1 = np.average(returns_monthly_1)
@@ -111,7 +113,6 @@ mvp_risk_annual = np.sqrt(proportion_annual_1**2 * variance_annual_1 + proportio
 
 print ''
 print 'Minimum Variance Portfolio: '
-#print '\tMVP proportion ', stock_code_1, ': ', proportion_1 * 10000/100.00, '%'
 print('\tMVP proportion {}: {:.3f}%').format(stock_code_1, proportion_1 * 100.00)
 #print '\tMVP proportion ', stock_code_2, ': ', proportion_2 * 10000/100.00, '%'
 print('\tMVP proportion {}: {:.3f}%').format(stock_code_2, proportion_2 * 100.00)
@@ -119,17 +120,18 @@ print('\tMVP proportion {}: {:.3f}%').format(stock_code_2, proportion_2 * 100.00
 print('\tMVP monthly standard deviation: {:.3f}%').format(mvp_risk * 100.00)
 #print '\tMVP expected portfolio return: ', mvp_return * 10000/100.00, '%'
 print('\tMVP monthly standard portfolio return: {:.3f}%').format(mvp_return * 100.00)
+#print '\tMVP annual standard deviation: ', mvp_risk_annual * 10000/100.00, '%'
 print('\tMVP annual standard deviation: {:.3f}%').format(mvp_risk_annual * 100.00)
-#print '\tMVP expected portfolio return: ', mvp_return * 10000/100.00, '%'
+#print '\tMVP annual expected portfolio return: ', mvp_return_annual * 10000/100.00, '%'
 print('\tMVP annual standard portfolio return: {:.3f}%').format(mvp_return_annual * 100.00)
 
 
-# Maximize Sharpre Ratio
+# Maximize Sharpe Ratio
 
 w_1 = 0.0
 w_2 = 1.0
 
-max_r = (w_1 * average_return_monthly_1 + w_2 * average_return_monthly_2 - risk_free_rate) / np.sqrt(w_1**2 * variance_monthly_1 + w_2**2 * variance_monthly_2 + 2 * w_1 * w_2 * covariance_monthly)
+max_r = (w_1 * average_return_monthly_1 + w_2 * average_return_monthly_2 - risk_free_rate_monthly) / np.sqrt(w_1**2 * variance_monthly_1 + w_2**2 * variance_monthly_2 + 2 * w_1 * w_2 * covariance_monthly)
 max_w1 = 0.0
 max_w2 = 1
 
@@ -137,7 +139,7 @@ for x in range(0, 10000):
     w_1 = w_1 + 0.0001
     w_2 = w_2 - 0.0001
     e_rp = w_1 * average_return_monthly_1 + w_2 * average_return_monthly_2
-    excess_return = e_rp - risk_free_rate
+    excess_return = e_rp - risk_free_rate_monthly
     sharpe_ratio = excess_return / np.sqrt(w_1**2 * variance_monthly_1 + w_2**2 * variance_monthly_2 + 2 * w_1 * w_2 * covariance_monthly)
 
     if(sharpe_ratio > max_r):
@@ -147,6 +149,30 @@ for x in range(0, 10000):
 
 max_return = (max_w1 * average_return_monthly_1 + max_w2 * average_return_monthly_2)
 max_risk = np.sqrt(max_w1 ** 2 * variance_monthly_1 + max_w2 ** 2 * variance_monthly_2 + 2 * max_w1 * max_w2 * covariance_monthly)
+
+# Annual Sharpe Ratio
+w_annual_1 = 0.0
+w_annual_2 = 1.0
+
+max_annual_r = (w_annual_1 * average_return_annual_1 + w_annual_2 * average_return_annual_2 - risk_free_rate) / np.sqrt(w_annual_1**2 * variance_annual_1 + w_annual_2**2 * variance_annual_2 + 2 * w_annual_1 * w_annual_2 * covariance_annual)
+max_annual_w1 = 0.0
+max_annual_w2 = 1
+
+for x in range(0, 10000):
+    w_annual_1 = w_annual_1 + 0.0001
+    w_annual_2 = w_annual_2 - 0.0001
+    e_rp = w_annual_1 * average_return_annual_1 + w_annual_2 * average_return_annual_2
+    excess_return = e_rp - risk_free_rate
+    sharpe_ratio = excess_return / np.sqrt(w_annual_1**2 * variance_annual_1 + w_annual_2**2 * variance_annual_2 + 2 * w_annual_1 * w_annual_2 * covariance_annual)
+
+    if(sharpe_ratio > max_annual_r):
+        max_annual_r = sharpe_ratio
+        max_annual_w1 = w_annual_1
+        max_annual_w2 = w_annual_2
+
+max_return_annual = (max_annual_w1 * average_return_annual_1 + max_annual_w2 * average_return_annual_2)
+max_risk_annual = np.sqrt(max_annual_w1 ** 2 * variance_annual_1 + max_annual_w2 ** 2 * variance_annual_2 + 2 * max_annual_w1 * max_annual_w2 * covariance_annual)
+
 
 print ''
 print 'Case 1: '
@@ -158,24 +184,34 @@ print ('\tMarket portfolio proportion {}: {:.3f}%').format(stock_code_1, max_w1 
 #print '\tMarket portfolio proportion ', stock_code_2, ": ", max_w2 * 100, "%"
 print ('\tMarket portfolio proportion {}: {:.3f}%').format(stock_code_2, max_w2 * 100.00)
 #print '\tMarket portfolio expected return: ', max_return * 10000/100.00, "%"
-print ('\tMarket portfolio expected return: {:.3f}%').format(max_return * 100.00)
+print ('\tMarket monthly portfolio expected return: {:.3f}%').format(max_return * 100.00)
 #print '\tMarket portfolio standard deviation: ', max_risk * 10000/100.00, "%"
-print ('\tMarket portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk) * 100.00)
+print ('\tMarket monthly portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk) * 100.00)
+#print '\tMarket portfolio expected return: ', max_return * 10000/100.00, "%"
+print ('\tMarket annual portfolio expected return: {:.3f}%').format(max_return_annual * 100.00)
+#print '\tMarket portfolio standard deviation: ', max_risk * 10000/100.00, "%"
+print ('\tMarket mannual portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk_annual) * 100.00)
 
 print ''
 print 'Case 2: '
 print '\tGiven-Proportion invested in risk-free asset: 50%'
 print '\tGiven-Proportion invested in market portfolio: 50%'
-#print '\tPortfolio expected return: ', (0.5 * max_return + 0.5 * risk_free_rate) * 10000/100.00, "%"
-print ('\tPortfolio expected return: {:.3f}%').format((0.5 * max_return + 0.5 * risk_free_rate) * 100.00)
+#print '\tPortfolio expected return: ', (0.5 * max_return + 0.5 * risk_free_rate_monthly) * 10000/100.00, "%"
+print ('\tPortfolio monthly expected return: {:.3f}%').format((0.5 * max_return + 0.5 * risk_free_rate_monthly) * 100.00)
 #print '\tPortfolio standard deviation: ', (0.5 * np.sqrt(max_risk))* 10000/100.00, "%"
-print ('\tPortfolio standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_risk)) * 100.00)
+print ('\tPortfolio monthly standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_risk)) * 100.00)
+print ('\tPortfolio annual expected return: {:.3f}%').format((0.5 * max_return_annual + 0.5 * risk_free_rate) * 100.00)
+#print '\tPortfolio standard deviation: ', (0.5 * np.sqrt(max_risk))* 10000/100.00, "%"
+print ('\tPortfolio annual standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_risk_annual)) * 100.00)
 
 print ''
 print 'Case 3: '
 print '\tGiven-Proportion invested in risk-free asset: -50%'
 print '\tGiven-Proportion invested in market portfolio: 150%'
-#print '\tPortfolio expected return: ', (-0.5 * risk_free_rate + 1.5 * max_return) * 10000/100.00, "%"
-print ('\tPortfolio expected return: {:.3f}%').format((-0.5 * risk_free_rate + 1.5 * max_return) * 100.00)
+#print '\tPortfolio expected return: ', (-0.5 * risk_free_rate_monthly + 1.5 * max_return) * 10000/100.00, "%"
+print ('\tPortfolio monthly expected return: {:.3f}%').format((-0.5 * risk_free_rate_monthly + 1.5 * max_return) * 100.00)
 #print '\tPortfolio standard deviation: ', (1.5 * np.sqrt(max_risk))* 10000/100.00, "%"
-print ('\tPortfolio standard deviation: {:.3f}%').format((1.5 * np.sqrt(max_risk)) * 100.00)
+print ('\tPortfolio monthly standard deviation: {:.3f}%').format((1.5 * np.sqrt(max_risk)) * 100.00)
+print ('\tPortfolio annual expected return: {:.3f}%').format((-0.5 * risk_free_rate + 1.5 * max_return_annual) * 100.00)
+#print '\tPortfolio standard deviation: ', (1.5 * np.sqrt(max_risk))* 10000/100.00, "%"
+print ('\tPortfolio annual standard deviation: {:.3f}%').format((1.5 * np.sqrt(max_risk_annual)) * 100.00)
