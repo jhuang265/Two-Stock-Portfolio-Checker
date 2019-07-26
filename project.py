@@ -114,15 +114,10 @@ mvp_risk_annual = np.sqrt(proportion_annual_1**2 * variance_annual_1 + proportio
 print ''
 print 'Minimum Variance Portfolio: '
 print('\tMVP proportion {}: {:.3f}%').format(stock_code_1, proportion_1 * 100.00)
-#print '\tMVP proportion ', stock_code_2, ': ', proportion_2 * 10000/100.00, '%'
 print('\tMVP proportion {}: {:.3f}%').format(stock_code_2, proportion_2 * 100.00)
-#print '\tMVP standard deviation: ', mvp_risk * 10000/100.00, '%'
 print('\tMVP monthly standard deviation: {:.3f}%').format(mvp_risk * 100.00)
-#print '\tMVP expected portfolio return: ', mvp_return * 10000/100.00, '%'
 print('\tMVP monthly standard portfolio return: {:.3f}%').format(mvp_return * 100.00)
-#print '\tMVP annual standard deviation: ', mvp_risk_annual * 10000/100.00, '%'
 print('\tMVP annual standard deviation: {:.3f}%').format(mvp_risk_annual * 100.00)
-#print '\tMVP annual expected portfolio return: ', mvp_return_annual * 10000/100.00, '%'
 print('\tMVP annual standard portfolio return: {:.3f}%').format(mvp_return_annual * 100.00)
 
 
@@ -179,39 +174,27 @@ print 'Case 1: '
 print '\tGiven-Proportion invested in risk-free asset: 0%'
 print '\tGiven-Proportion invested in market portfolio: 100%'
 print ('\tMaximum Sharpe ratio: {:.3f}').format(max_r)
-#print '\tMarket portfolio proportion ', stock_code_1, ": ", max_w1 * 100, "%"
 print ('\tMarket portfolio proportion {}: {:.3f}%').format(stock_code_1, max_w1 * 100.00)
-#print '\tMarket portfolio proportion ', stock_code_2, ": ", max_w2 * 100, "%"
 print ('\tMarket portfolio proportion {}: {:.3f}%').format(stock_code_2, max_w2 * 100.00)
-#print '\tMarket portfolio expected return: ', max_return * 10000/100.00, "%"
 print ('\tMarket monthly portfolio expected return: {:.3f}%').format(max_return * 100.00)
-#print '\tMarket portfolio standard deviation: ', max_risk * 10000/100.00, "%"
 print ('\tMarket monthly portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk) * 100.00)
-#print '\tMarket portfolio expected return: ', max_return * 10000/100.00, "%"
 print ('\tMarket annual portfolio expected return: {:.3f}%').format(max_return_annual * 100.00)
-#print '\tMarket portfolio standard deviation: ', max_risk * 10000/100.00, "%"
 print ('\tMarket mannual portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk_annual) * 100.00)
 
 print ''
 print 'Case 2: '
 print '\tGiven-Proportion invested in risk-free asset: 50%'
 print '\tGiven-Proportion invested in market portfolio: 50%'
-#print '\tPortfolio expected return: ', (0.5 * max_return + 0.5 * risk_free_rate_monthly) * 10000/100.00, "%"
 print ('\tPortfolio monthly expected return: {:.3f}%').format((0.5 * max_return + 0.5 * risk_free_rate_monthly) * 100.00)
-#print '\tPortfolio standard deviation: ', (0.5 * np.sqrt(max_risk))* 10000/100.00, "%"
 print ('\tPortfolio monthly standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_risk)) * 100.00)
 print ('\tPortfolio annual expected return: {:.3f}%').format((0.5 * max_return_annual + 0.5 * risk_free_rate) * 100.00)
-#print '\tPortfolio standard deviation: ', (0.5 * np.sqrt(max_risk))* 10000/100.00, "%"
 print ('\tPortfolio annual standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_risk_annual)) * 100.00)
 
 print ''
 print 'Case 3: '
 print '\tGiven-Proportion invested in risk-free asset: -50%'
 print '\tGiven-Proportion invested in market portfolio: 150%'
-#print '\tPortfolio expected return: ', (-0.5 * risk_free_rate_monthly + 1.5 * max_return) * 10000/100.00, "%"
 print ('\tPortfolio monthly expected return: {:.3f}%').format((-0.5 * risk_free_rate_monthly + 1.5 * max_return) * 100.00)
-#print '\tPortfolio standard deviation: ', (1.5 * np.sqrt(max_risk))* 10000/100.00, "%"
 print ('\tPortfolio monthly standard deviation: {:.3f}%').format((1.5 * np.sqrt(max_risk)) * 100.00)
 print ('\tPortfolio annual expected return: {:.3f}%').format((-0.5 * risk_free_rate + 1.5 * max_return_annual) * 100.00)
-#print '\tPortfolio standard deviation: ', (1.5 * np.sqrt(max_risk))* 10000/100.00, "%"
 print ('\tPortfolio annual standard deviation: {:.3f}%').format((1.5 * np.sqrt(max_risk_annual)) * 100.00)
