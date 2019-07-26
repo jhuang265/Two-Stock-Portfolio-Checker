@@ -15,12 +15,16 @@ stock_code_1 = raw_input("Stock code name 1: ")
 # Read data for stock 1
 while True:
     try:
+        # Defaults to daily returns
         df = pdr.DataReader(stock_code_1, 'yahoo', start, end)
 
-        # Uncomment and change if you want weekly, monthly or yearly returns
+        # Uncomment and change to 'W' you want weekly, 'M' for monthly or 'Y' for yearly returns
         df = df.groupby(pd.Grouper(freq='M')).mean()
+
         stock_1 = df['Adj Close']
     except pdr._utils.RemoteDataError:
+
+        # If invalid, as for a good stock code
         stock_code_1 = raw_input("Enter a valid code for Stock 1: ")
         continue;
     break
@@ -30,9 +34,8 @@ stock_code_2 = raw_input("Stock code name 2: ")
 while True:
     try:
         df = pdr.DataReader(stock_code_2, 'yahoo', start, end)
-
-        # Uncomment and change if you want weekly, monthly or yearly returns
         df = df.groupby(pd.Grouper(freq='M')).mean()
+
         stock_2 = df['Adj Close']
     except pdr._utils.RemoteDataError:
         stock_code_2 = raw_input("Enter a valid code for Stock 2: ")
@@ -43,12 +46,15 @@ while True:
 risk_free_string = raw_input("Risk Free Rate (Annual) (in percentage form ex. 5.25%): ")
 while True:
     try:
+        # Parse for percentage
         risk_free_rate = float(re.findall(r'(\d+(\.\d+)?%)', risk_free_string)[0][0].rstrip("%"))/100.0000
     except IndexError:
+        # Ask again if not valid
         risk_free_string = raw_input("Please enter a percentage value of the form X.XX%: ")
         continue
     break
 
+# Get monthly risk free rate
 risk_free_rate_monthly = np.power([risk_free_rate+1], [1.0/12.0])[0] -1;
 
 # Calculate returns for both stocks
@@ -61,6 +67,7 @@ for x in range(len(stock_1) - 1):
     returns_monthly_2.append(stock_2[row+1]/stock_2[row]-1)
     row = row + 1
 
+# Annual returns
 average_return_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
 average_return_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
 
@@ -86,8 +93,6 @@ stdev_annual_2  = np.sqrt(variance_annual_2)
 covariance_monthly = covariances_monthly[0][1]
 covariance_annual = covariances_annual[0][1]
 
-#print covariance
-
 # Min Variance Portfolio
 
 proportion_1 = (variance_monthly_2 - covariance_monthly)/(variance_monthly_1 + variance_monthly_2 - 2*covariance_monthly)
@@ -100,6 +105,7 @@ proportion_2 = (1 - proportion_1)
 mvp_return = proportion_1 * average_return_monthly_1 + proportion_2 * average_return_monthly_2
 mvp_risk = np.sqrt(proportion_1**2 * variance_monthly_1 + proportion_2**2 * variance_monthly_2 + 2 * proportion_1 * proportion_2 * covariance_monthly)
 
+# Annual minimum variance portfolio
 proportion_annual_1 = (variance_annual_2 - covariance_annual)/(variance_annual_1 + variance_annual_2 - 2*covariance_annual)
 if(proportion_annual_1 > 1):
     proportion_annual_1 = 1;
@@ -110,6 +116,7 @@ proportion_annual_2 = (1 - proportion_annual_1)
 mvp_return_annual = proportion_annual_1 * average_return_annual_1 + proportion_annual_2 * average_return_annual_2
 mvp_risk_annual = np.sqrt(proportion_annual_1**2 * variance_annual_1 + proportion_annual_2**2 * variance_annual_2 + 2 * proportion_annual_1 * proportion_annual_2 * covariance_annual)
 
+# Display minimum variance portfolio
 
 print ''
 print 'Minimum Variance Portfolio: '
@@ -168,6 +175,7 @@ for x in range(0, 10000):
 max_return_annual = (max_annual_w1 * average_return_annual_1 + max_annual_w2 * average_return_annual_2)
 max_risk_annual = np.sqrt(max_annual_w1 ** 2 * variance_annual_1 + max_annual_w2 ** 2 * variance_annual_2 + 2 * max_annual_w1 * max_annual_w2 * covariance_annual)
 
+# Print out cases
 
 print ''
 print 'Case 1: '
