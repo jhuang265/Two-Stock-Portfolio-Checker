@@ -15,31 +15,30 @@ stock_code_1 = raw_input("Stock code name 1: ")
 # Read data for stock 1
 while True:
     try:
-        # Defaults to daily returns
-        df = pdr.DataReader(stock_code_1, 'yahoo', start, end)
-
         # Uncomment and change to 'W' you want weekly, 'M' for monthly or 'Y' for yearly returns
-        df = df.groupby(pd.Grouper(freq='M')).mean()
+        df = pdr.get_data_yahoo(stock_code_1, start=start, end=end, interval='m')
+
+        # df = pdr.DataReader(stock_code_1, 'yahoo', start, end)
+        # df = df.groupby(pd.Grouper(freq='M')).mean()
 
         stock_1 = df['Adj Close']
-    except pdr._utils.RemoteDataError:
+    except (KeyError, pdr._utils.RemoteDataError) as e:
 
         # If invalid, as for a good stock code
         stock_code_1 = raw_input("Enter a valid code for Stock 1: ")
-        continue;
+        continue
     break
 
 # Read data for stock 2
 stock_code_2 = raw_input("Stock code name 2: ")
 while True:
     try:
-        df = pdr.DataReader(stock_code_2, 'yahoo', start, end)
-        df = df.groupby(pd.Grouper(freq='M')).mean()
+        df = pdr.get_data_yahoo(stock_code_2, start=start, end=end, interval='m')
 
         stock_2 = df['Adj Close']
-    except pdr._utils.RemoteDataError:
+    except (KeyError, pdr._utils.RemoteDataError) as e:
         stock_code_2 = raw_input("Enter a valid code for Stock 2: ")
-        continue;
+        continue
     break
 
 # Get risk-free rate from input
@@ -55,33 +54,28 @@ while True:
     break
 
 # Get monthly risk free rate
-risk_free_rate_monthly = np.power([risk_free_rate+1], [1.0/12.0])[0] -1;
+risk_free_rate_monthly = np.power([risk_free_rate+1], [1.0/12.0])[0] -1
 
 # Calculate returns for both stocks
-returns_monthly_1 = []
-returns_monthly_2 = []
-
-row = 0
-for x in range(len(stock_1) - 1):
-    returns_monthly_1.append(stock_1[row+1]/stock_1[row]-1)
-    returns_monthly_2.append(stock_2[row+1]/stock_2[row]-1)
-    row = row + 1
-
-# Annual returns
-average_return_annual_1 = (1 + np.average(returns_monthly_1))**12 - 1
-average_return_annual_2 = (1 + np.average(returns_monthly_2))**12 - 1
+returns_monthly_1 = stock_1.pct_change()
+returns_monthly_2 = stock_2.pct_change()
 
 # Calculate statistics for returns
-average_return_monthly_1 = np.average(returns_monthly_1)
-average_return_monthly_2 = np.average(returns_monthly_2)
+average_return_monthly_1 = returns_monthly_1.mean()
+average_return_monthly_2 = returns_monthly_2.mean()
 
-variance_monthly_1 = np.var(returns_monthly_1)
-variance_monthly_2 = np.var(returns_monthly_2)
+# Annual returns
+average_return_annual_1 = (1 + average_return_monthly_1)**12 - 1
+average_return_annual_2 = (1 + average_return_monthly_2)**12 - 1
 
-stdev_monthly_1 = np.std(returns_monthly_1)
-stdev_monthly_2 = np.std(returns_monthly_2)
+variance_monthly_1 = returns_monthly_1.var()
+variance_monthly_2 = returns_monthly_2.var()
 
-covariances_monthly = np.cov(returns_monthly_1, returns_monthly_2)
+stdev_monthly_1 = returns_monthly_1.std()
+stdev_monthly_2 = returns_monthly_2.std()
+
+# [1:] because the first row is NAN since we are calculating the change of rate
+covariances_monthly = np.cov(returns_monthly_1.to_numpy()[1:], returns_monthly_2.to_numpy()[1:])
 covariances_annual = covariances_monthly * 12
 
 variance_annual_1 = covariances_annual[0][0]
@@ -94,6 +88,17 @@ covariance_monthly = covariances_monthly[0][1]
 covariance_annual = covariances_annual[0][1]
 
 # Min Variance Portfolio
+
+# Generate weights of 2.5% interval
+# weights_1 = np.array(list(range(0, 41)))*0.025
+# weights_2 = 1 - weights_1
+# weights = np.array([weights_1, weights_2]).T
+
+# # port_returns = [np.matmul(w,returns.T) for w in weights]
+# port_returns = [w[0] * average_return_annual_1 + w[1] * average_return_annual_2 for w in weights]
+# # port_vars    = [np.matmul(np.matmul(w,covar),w.T) for w in weights]
+# port_vars    = [w[0]**2*covariances_annual[0,0] + w[1]**2*covariances_annual[1,1] + 2*w[0]*w[1]*covariances_annual[0,1] for w in weights]
+# port_sds     = [np.sqrt(v) for v in port_vars]
 
 proportion_1 = (variance_monthly_2 - covariance_monthly)/(variance_monthly_1 + variance_monthly_2 - 2*covariance_monthly)
 if(proportion_1 > 1):
@@ -118,8 +123,8 @@ mvp_risk_annual = np.sqrt(proportion_annual_1**2 * variance_annual_1 + proportio
 
 # Display minimum variance portfolio
 
-print ''
-print 'Minimum Variance Portfolio: '
+print ('')
+print ('Minimum Variance Portfolio: ')
 print('\tMVP proportion {}: {:.3f}%').format(stock_code_1, proportion_1 * 100.00)
 print('\tMVP proportion {}: {:.3f}%').format(stock_code_2, proportion_2 * 100.00)
 print('\tMVP monthly standard deviation: {:.3f}%').format(mvp_risk * 100.00)
@@ -177,31 +182,34 @@ max_risk_annual = np.sqrt(max_annual_w1 ** 2 * variance_annual_1 + max_annual_w2
 
 # Print out cases
 
-print ''
-print 'Case 1: '
-print '\tGiven-Proportion invested in risk-free asset: 0%'
-print '\tGiven-Proportion invested in market portfolio: 100%'
+print ('')
+print ('Case 1: ')
+print ('\tGiven-Proportion invested in risk-free asset: 0%')
+print ('\tGiven-Proportion invested in market portfolio: 100%')
+print ('')
 print ('\tMaximum Sharpe ratio: {:.3f}').format(max_r)
 print ('\tMarket portfolio proportion {}: {:.3f}%').format(stock_code_1, max_w1 * 100.00)
 print ('\tMarket portfolio proportion {}: {:.3f}%').format(stock_code_2, max_w2 * 100.00)
 print ('\tMarket monthly portfolio expected return: {:.3f}%').format(max_return * 100.00)
 print ('\tMarket monthly portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk) * 100.00)
 print ('\tMarket annual portfolio expected return: {:.3f}%').format(max_return_annual * 100.00)
-print ('\tMarket mannual portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk_annual) * 100.00)
+print ('\tMarket annual portfolio standard deviation: {:.3f}%').format(np.sqrt(max_risk_annual) * 100.00)
 
-print ''
-print 'Case 2: '
-print '\tGiven-Proportion invested in risk-free asset: 50%'
-print '\tGiven-Proportion invested in market portfolio: 50%'
+print ('')
+print ('Case 2: ')
+print ('\tGiven-Proportion invested in risk-free asset: 50%')
+print ('\tGiven-Proportion invested in market portfolio: 50%')
+print ('')
 print ('\tPortfolio monthly expected return: {:.3f}%').format((0.5 * max_return + 0.5 * risk_free_rate_monthly) * 100.00)
 print ('\tPortfolio monthly standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_risk)) * 100.00)
 print ('\tPortfolio annual expected return: {:.3f}%').format((0.5 * max_return_annual + 0.5 * risk_free_rate) * 100.00)
 print ('\tPortfolio annual standard deviation: {:.3f}%').format((0.5 * np.sqrt(max_risk_annual)) * 100.00)
 
-print ''
-print 'Case 3: '
-print '\tGiven-Proportion invested in risk-free asset: -50%'
-print '\tGiven-Proportion invested in market portfolio: 150%'
+print ('')
+print ('Case 3: ')
+print ('\tGiven-Proportion invested in risk-free asset: -50%')
+print ('\tGiven-Proportion invested in market portfolio: 150%')
+print ('')
 print ('\tPortfolio monthly expected return: {:.3f}%').format((-0.5 * risk_free_rate_monthly + 1.5 * max_return) * 100.00)
 print ('\tPortfolio monthly standard deviation: {:.3f}%').format((1.5 * np.sqrt(max_risk)) * 100.00)
 print ('\tPortfolio annual expected return: {:.3f}%').format((-0.5 * risk_free_rate + 1.5 * max_return_annual) * 100.00)
