@@ -114,5 +114,13 @@ for i in range(1, len(proportions)):
     for j in range(0, i):
         portfolio_risk += 2 * proportions[i] * proportions[j] * covariances_annual[i][j]
 
+portfolio_risk = np.sqrt(portfolio_risk)
+
+for i in  range(0, len(proportions)):
+    print("Stock {}:").format(i)
+    print("\tReturn: {}%").format(returns_annual[i]*100.00)
+    print("\tVariance: {}%").format(covariances_annual[i][i]*100.00)
+    print("\tStandard Deviation: {}%").format(np.sqrt(covariances_annual[i][i]*100.00))
+
 print ("Portfolio Risk: {}%").format(portfolio_risk * 100.00)
 print ("Portfolio Return: {}%").format(portfolio_return * 100.00)
