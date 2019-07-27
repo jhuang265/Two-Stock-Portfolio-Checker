@@ -65,19 +65,19 @@ variance_monthly = []
 std_monthly = []
 returns_annual = []
 
-for i in range(0, len(returns_monthly)):
+for i in range(0, counter):
     average_returns_monthly.append(returns_monthly[i].mean())
     variance_monthly.append(returns_monthly[i].var())
     std_monthly.append(returns_monthly[i].std())
 
-for i in range(0, len(average_returns_monthly)):
+for i in range(0, counter):
     returns_annual.append((1+average_returns_monthly[i])**12 - 1)
 
 covariances_monthly = []
 
-for i in range(0, len(returns_monthly)):
+for i in range(0, counter):
     variances = []
-    for j in range(0, len(returns_monthly)):
+    for j in range(0, counter):
         variances.append(np.cov(returns_monthly[i].to_numpy(), returns_monthly[j].to_numpy())[0][1])
     covariances_monthly.append(variances)
 
@@ -94,16 +94,16 @@ total = 0.0
 portfolio_return = np.dot(returns_annual, proportions)
 portfolio_risk = 0
 
-for i in range(0, len(proportions)):
+for i in range(0, counter):
     portfolio_risk += covariances_annual[i][i] * proportions[i]**2
 
-for i in range(1, len(proportions)):
+for i in range(1, counter):
     for j in range(0, i):
         portfolio_risk += 2 * proportions[i] * proportions[j] * covariances_annual[i][j]
 
 portfolio_risk = np.sqrt(portfolio_risk)
 
-for i in  range(0, len(proportions)):
+for i in  range(0, counter):
     print ''
     print("Stock {}:").format(i)
     print("\tReturn: {}%").format(returns_annual[i]*100.00)
