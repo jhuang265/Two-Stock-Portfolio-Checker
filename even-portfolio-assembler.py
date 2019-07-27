@@ -88,21 +88,8 @@ for i in covariances_monthly:
         variances.append(j*12)
     covariances_annual.append(variances)
 
-proportions = []
+proportions = [1.0/float(counter)]*counter
 total = 0.0
-
-while True:
-    total = 0.0
-    for i in range(0, len(returns_annual)):
-        prop_stock = float(raw_input(("How much of stock {} would you like? (enter in decimal format): ").format(i)))
-        proportions.append(prop_stock)
-        total += prop_stock
-    if(abs(total - 1.0) > 1.001):
-        print "Please enter valid proportions (must sum to 100%)"
-        continue;
-    else:
-        break;
-
 
 portfolio_return = np.dot(returns_annual, proportions)
 portfolio_risk = 0
