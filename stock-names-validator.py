@@ -23,8 +23,9 @@ for stock in current_data['Ticker']:
 
     valid_data.append(stock)
     counter = counter + 1
-    if counter >= 5:
-        break
+    if counter % 100 == 0:
+        # Store it in case anything breaks
+        pd.DataFrame({'StockNames': valid_data}).to_excel('valid-stock-names.xlsx')
 
 # Store data into an excel under one column
 pd.DataFrame({'StockNames': valid_data}).to_excel('valid-stock-names.xlsx')
