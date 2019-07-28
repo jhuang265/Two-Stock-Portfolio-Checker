@@ -123,8 +123,8 @@ mvp_risk_annual = np.sqrt(proportion_annual_1**2 * variance_annual_1 + proportio
 
 # Display minimum variance portfolio
 
-print ''
-print 'Minimum Variance Portfolio: '
+print('')
+print('Minimum Variance Portfolio: ')
 print('\tMVP monthly proportion {}: {:.3f}%').format(stock_code_1, proportion_1 * 100.00)
 print('\tMVP monthly proportion {}: {:.3f}%').format(stock_code_2, proportion_2 * 100.00)
 print('\tMVP monthly standard deviation: {:.3f}%').format(mvp_risk * 100.00)
