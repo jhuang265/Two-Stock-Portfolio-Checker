@@ -15,9 +15,12 @@ def readStockFromList(stockList):
 
     # Read data for stock
     for i in stockList:
+        try:
             df = pdr.get_data_yahoo(i, start=start, end=end, interval='m')
             all_returns_monthly.append(df['Adj Close'])
             continue
+        except (KeyError):
+            return []
 
     return all_returns_monthly
 
@@ -87,7 +90,6 @@ def calcPortfolio(risk_free_rate , all_returns_monthly):
 
     # Get monthly risk free rate
     risk_free_rate_monthly = np.power([risk_free_rate + 1], [1.0 / 12.0])[0] - 1
-
 
     returns_monthly = []
     for stock in all_returns_monthly:
@@ -163,20 +165,25 @@ def printPortfolio(portfolio):
     print("Portfolio Return: {}%").format(portfolio_return * 100.00)
 # ================================================
 
-
 # the function that initiates the process of calculating a custom portfolio
 def genEvenPortfolio(stocklist=None, printIf=-1):
 
-    if not (stocklist is None) :
-        all_returns_monthly = readStockFromList(stocklist)
-    else :
-        all_returns_monthly = readStock()
+    try:
+        if not (stocklist is None) :
+            all_returns_monthly = readStockFromList(stocklist)
+        else :
+            all_returns_monthly = readStock()
+    except:
+        return {'ret': 0, 'risk': 1, 'stocks': {'returnAnn': 0.00, 'covAnn': 1}}
 
     #risk_free_rate = readRiskFree()
     risk_free_rate = 0.05
-    portfolioResult = calcPortfolio(risk_free_rate, all_returns_monthly)
+    try:
+        portfolioResult = calcPortfolio(risk_free_rate, all_returns_monthly)
+    except:
+        return {'ret': 0, 'risk': 1, 'stocks': {'returnAnn': 0.00, 'covAnn': 1}}
 
-    if printIf:
-        printPortfolio(portfolioResult)
+    #if printIf:
+    #    printPortfolio(portfolioResult)
 
     return portfolioResult

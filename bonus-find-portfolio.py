@@ -10,11 +10,6 @@ current_data = pd.read_excel('valid-stock-names.xlsx', sheet_name='Sheet1')
 
 stockNames = current_data[['StockNames']].values.T[0].tolist()
 
-for i in stockNames:
-    print i
-
-# print("length: " + str(len(stockNames)))
-
 portfolio = epm.genEvenPortfolio([stockNames[2], stockNames[3], stockNames[4], stockNames[5], stockNames[6]])
 #print ('ret: {} \trisk: {}'.format(portfolio['ret'], portfolio['risk']))
 
