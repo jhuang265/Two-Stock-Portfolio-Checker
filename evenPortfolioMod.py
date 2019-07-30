@@ -16,7 +16,6 @@ def readStockFromList(stockList):
     # Read data for stock
     for i in stockList:
             df = pdr.get_data_yahoo(i, start=start, end=end, interval='m')
-
             all_returns_monthly.append(df['Adj Close'])
             continue
 
@@ -150,16 +149,16 @@ def printPortfolio(portfolio):
     portfolio_risk = portfolio['risk']
     portfolio_return = portfolio['ret']
 
+    '''
     for i in range(0, len(returns_annual)):
-        print
-        ''
+        print''
         print("Stock {}:").format(i)
         print("\tReturn: {}%").format(returns_annual[i] * 100.00)
         print("\tVariance: {}%").format(covariances_annual[i][i] * 100.00)
         print("\tStandard Deviation: {}%").format(np.sqrt(covariances_annual[i][i] * 100.00))
 
     print
-    ''
+    '''
     print("Portfolio Risk: {}%").format(portfolio_risk * 100.00)
     print("Portfolio Return: {}%").format(portfolio_return * 100.00)
 # ================================================
@@ -173,7 +172,8 @@ def genEvenPortfolio(stocklist=None, printIf=-1):
     else :
         all_returns_monthly = readStock()
 
-    risk_free_rate = readRiskFree()
+    #risk_free_rate = readRiskFree()
+    risk_free_rate = 0.05
     portfolioResult = calcPortfolio(risk_free_rate, all_returns_monthly)
 
     if printIf:
