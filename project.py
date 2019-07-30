@@ -25,7 +25,7 @@ while True:
     except (KeyError, pdr._utils.RemoteDataError) as e:
 
         # If invalid, as for a good stock code
-        stock_code_1 = raw_input("Enter a valid code for Stock 1: ")
+
         continue
     break
 
@@ -142,7 +142,7 @@ w_2 = 1.0
 
 max_r = (w_1 * average_return_monthly_1 + w_2 * average_return_monthly_2 - risk_free_rate_monthly) / np.sqrt(w_1**2 * variance_monthly_1 + w_2**2 * variance_monthly_2 + 2 * w_1 * w_2 * covariance_monthly)
 max_w1 = 0.0
-max_w2 = 1
+max_w2 = 1.0
 
 for x in range(0, 10000):
     w_1 = w_1 + 0.0001

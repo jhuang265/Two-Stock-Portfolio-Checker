@@ -7,7 +7,21 @@ import numpy as np
 # read in stock codes from an array
 def readStockFromList(stockList):
 
-    return
+    # Set dates
+    start = datetime.datetime(2018, 6, 1)
+    end = datetime.datetime(2019, 6, 1)
+
+    all_returns_monthly = []
+
+    # Read data for stock
+    for i in stockList:
+            df = pdr.get_data_yahoo(i, start=start, end=end, interval='m')
+
+            all_returns_monthly.append(df['Adj Close'])
+            continue
+
+    return all_returns_monthly
+
 # =======================================
 # return an array of the monthly returns, maximum size 10
 def readStock():
@@ -30,7 +44,7 @@ def readStock():
                 break
 
             if (stock_code == 'done'):
-                break;
+                break
 
             df = pdr.get_data_yahoo(stock_code, start=start, end=end, interval='m')
 
@@ -40,7 +54,7 @@ def readStock():
             all_returns_monthly.append(df['Adj Close'])
             counter = counter + 1
             stock_code = raw_input("Enter a code for the next stock: ")
-            continue;
+            continue
         except (KeyError, pdr._utils.RemoteDataError) as e:
 
             # If invalid, as for a good stock code
