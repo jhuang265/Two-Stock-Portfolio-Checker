@@ -183,7 +183,7 @@ def genEvenPortfolio(stocklist=None, printIf=-1):
     except:
         return {'ret': 0, 'risk': 1, 'stocks': {'returnAnn': 0.00, 'covAnn': 1}}
 
-    #if printIf:
-    #    printPortfolio(portfolioResult)
+    if printIf:
+        printPortfolio(portfolioResult)
 
     return portfolioResult
