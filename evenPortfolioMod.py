@@ -168,7 +168,7 @@ def printPortfolio(portfolio):
 # the function that initiates the process of calculating a custom portfolio
 def genEvenPortfolio(stocklist=None, printIf=-1):
 
-    if stocklist is None :
+    if not (stocklist is None) :
         all_returns_monthly = readStockFromList(stocklist)
     else :
         all_returns_monthly = readStock()
