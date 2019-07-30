@@ -13,7 +13,7 @@ stockNames = current_data[['StockNames']].values.T[0].tolist()
 # print("length: " + str(len(stockNames)))
 
 portfolio = epm.genEvenPortfolio([stockNames[2], stockNames[3], stockNames[4], stockNames[5], stockNames[6]])
-print ('ret: {} \trisk: {}'.format(portfolio['return'], portfolio['risk']))
+print ('ret: {} \trisk: {}'.format(portfolio['ret'], portfolio['risk']))
 
 # for i in range(1, len(stockNames)):
 #     for j in range(i, len(stockNames)):
