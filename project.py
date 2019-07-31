@@ -129,14 +129,8 @@ print('\t(monthly) MVP monthly proportion {}: {:.3f}%').format(stock_code_1, pro
 print('\tMVP monthly proportion {}: {:.3f}%').format(stock_code_2, proportion_2 * 100.00)
 print('\tMVP monthly standard deviation: {:.3f}%').format(mvp_risk * 100.00)
 print('\tMVP monthly standard portfolio return: {:.3f}%').format(mvp_return * 100.00)
-<<<<<<< HEAD
-print ('')
 print('\t(annual) MVP annual proportion {}: {:.3f}%').format(stock_code_1, proportion_annual_1 * 100.00)
 print('\tMVP annual proportion {}: {:.3f}%').format(stock_code_2, proportion_annual_2 * 100.00)
-=======
-print('\tMVP annual proportion {}: {:.3f}%').format(stock_code_1, proportion_annual_1 * 100.00)
-print('\tMVP annua; proportion {}: {:.3f}%').format(stock_code_2, proportion_annual_2 * 100.00)
->>>>>>> 47c0cfa36fea825d7d0c1eb6c2fc4c64b3f473ac
 print('\tMVP annual standard deviation: {:.3f}%').format(mvp_risk_annual * 100.00)
 print('\tMVP annual standard portfolio return: {:.3f}%').format(mvp_return_annual * 100.00)
 

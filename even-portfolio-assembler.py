@@ -97,8 +97,9 @@ portfolio_risk = 0
 for i in range(0, counter):
     portfolio_risk += covariances_annual[i][i] * proportions[i]**2
 
-for i in range(1, counter):
+for i in range(0, counter):
     for j in range(0, i):
+        print i, j
         portfolio_risk += 2 * proportions[i] * proportions[j] * covariances_annual[i][j]
 
 portfolio_risk = np.sqrt(portfolio_risk)
