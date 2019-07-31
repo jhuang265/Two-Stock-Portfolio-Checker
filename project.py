@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import re
 import datetime
+import matplotlib.pyplot as plt
 
 # Set dates
 start = datetime.datetime(2018, 6, 1)
@@ -133,8 +134,6 @@ print('\t(annual) MVP annual proportion {}: {:.3f}%').format(stock_code_1, propo
 print('\tMVP annual proportion {}: {:.3f}%').format(stock_code_2, proportion_annual_2 * 100.00)
 print('\tMVP annual standard deviation: {:.3f}%').format(mvp_risk_annual * 100.00)
 print('\tMVP annual standard portfolio return: {:.3f}%').format(mvp_return_annual * 100.00)
-
-
 # Maximize Sharpe Ratio
 
 w_1 = 0.0
@@ -222,3 +221,34 @@ print ('\tPortfolio monthly standard deviation: {:.3f}%').format((1.5 * max_risk
 print ('')
 print ('\t(annual) Portfolio annual expected return: {:.3f}%').format((-0.5 * risk_free_rate + 1.5 * max_return_annual) * 100.00)
 print ('\tPortfolio annual standard deviation: {:.3f}%').format((1.5 * max_risk_annual) * 100.00)
+
+
+weights_0 = np.array(list(range(0, 11)))/10.0
+weights_1 = 1 - weights_0
+weights = np.array([weights_0, weights_1]).T
+
+# port_returns = [np.matmul(w,returns.T) for w in weights]
+port_returns = [w[0] * average_return_annual_1 + w[1] * average_return_annual_2 for w in weights]
+# port_vars = [np.matmul(np.matmul(w,covar),w.T) for w in weights]
+port_vars = [w[0]**2*variance_annual_1 + w[1]**2*variance_annual_2 + 2*w[0]*w[1]*covariance_annual for w in weights]
+port_sds = [np.sqrt(v) for v in port_vars]
+
+def calc_SR(w,mu,Sigma,rf):
+    return_p = np.matmul(w,mu.T)
+    var_p    = np.matmul(np.matmul(w,Sigma),w.T)
+    sd_p     = np.sqrt(var_p)
+    return((return_p - rf)/sd_p)
+
+port_SRs = [calc_SR(w ,np.array([average_return_annual_1, average_return_annual_2]), np.array(covariances_annual), risk_free_rate) for w in weights]
+
+df = pd.DataFrame([port_returns,port_sds, port_SRs]).transpose()
+df.columns=['Returns', 'Volatility', 'Sharpe Ratio']
+
+plt.style.use('seaborn-dark')
+
+df.plot.scatter(x='Volatility', y='Returns', c='Sharpe Ratio', cmap='RdYlGn', edgecolors='black', figsize=(10, 8), grid=True)
+
+plt.xlabel('Volatility (Std. Deviation)')
+plt.ylabel('Expected Returns')
+plt.title('Efficient Frontier')
+plt.show()
