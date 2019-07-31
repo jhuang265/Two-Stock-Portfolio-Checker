@@ -161,29 +161,28 @@ def printPortfolio(portfolio):
 
     print
     '''
-    print("Portfolio Risk: {}%").format(portfolio_risk * 100.00)
-    print("Portfolio Return: {}%").format(portfolio_return * 100.00)
+    #print("Portfolio Risk: {}%").format(portfolio_risk * 100.00)
+    #print("Portfolio Return: {}%").format(portfolio_return * 100.00)
 # ================================================
 
 # the function that initiates the process of calculating a custom portfolio
 def genEvenPortfolio(stocklist=None, printIf=-1):
+
 
     try:
         if not (stocklist is None) :
             all_returns_monthly = readStockFromList(stocklist)
         else :
             all_returns_monthly = readStock()
-    except:
-        return {'ret': 0, 'risk': 1, 'stocks': {'returnAnn': 0.00, 'covAnn': 1}}
 
     #risk_free_rate = readRiskFree()
-    risk_free_rate = 0.05
-    try:
+        risk_free_rate = 0.05
+
         portfolioResult = calcPortfolio(risk_free_rate, all_returns_monthly)
+
+        if printIf:
+            printPortfolio(portfolioResult)
+
+        return portfolioResult
     except:
         return {'ret': 0, 'risk': 1, 'stocks': {'returnAnn': 0.00, 'covAnn': 1}}
-
-    if printIf:
-        printPortfolio(portfolioResult)
-
-    return portfolioResult

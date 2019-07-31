@@ -20,8 +20,11 @@ for i in range(1, len(stockNames)):
                 for l in range(h+1, len(stockNames)):
                      portfolio = epm.genEvenPortfolio([stockNames[i], stockNames[j],
                                     stockNames[k], stockNames[h], stockNames[l]])
+
                      if portfolio['ret'] > 0.1 and portfolio['risk'] < 0.05:
+                         print ([stockNames[i], stockNames[j], stockNames[k], stockNames[h], stockNames[l]])
                          break
+
 
 print portfolio
 
