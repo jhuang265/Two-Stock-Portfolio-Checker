@@ -151,16 +151,16 @@ def printPortfolio(portfolio):
     portfolio_risk = portfolio['risk']
     portfolio_return = portfolio['ret']
 
-    '''
+
     for i in range(0, len(returns_annual)):
         print''
         print("Stock {}:").format(i)
         print("\tReturn: {}%").format(returns_annual[i] * 100.00)
-        print("\tVariance: {}%").format(covariances_annual[i][i] * 100.00)
+        print("\tVariance: {}").format(covariances_annual[i][i])
         print("\tStandard Deviation: {}%").format(np.sqrt(covariances_annual[i][i] * 100.00))
 
     print
-    '''
+
     #print("Portfolio Risk: {}%").format(portfolio_risk * 100.00)
     #print("Portfolio Return: {}%").format(portfolio_return * 100.00)
 # ================================================
