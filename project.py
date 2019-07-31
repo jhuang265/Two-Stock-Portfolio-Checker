@@ -25,7 +25,7 @@ while True:
     except (KeyError, pdr._utils.RemoteDataError) as e:
 
         # If invalid, as for a good stock code
-        stock_code_1 = raw_input("Enter a valid code for Stock 1: ")
+
         continue
     break
 
@@ -129,9 +129,14 @@ print('\t(monthly) MVP monthly proportion {}: {:.3f}%').format(stock_code_1, pro
 print('\tMVP monthly proportion {}: {:.3f}%').format(stock_code_2, proportion_2 * 100.00)
 print('\tMVP monthly standard deviation: {:.3f}%').format(mvp_risk * 100.00)
 print('\tMVP monthly standard portfolio return: {:.3f}%').format(mvp_return * 100.00)
+<<<<<<< HEAD
 print ('')
 print('\t(annual) MVP annual proportion {}: {:.3f}%').format(stock_code_1, proportion_annual_1 * 100.00)
 print('\tMVP annual proportion {}: {:.3f}%').format(stock_code_2, proportion_annual_2 * 100.00)
+=======
+print('\tMVP annual proportion {}: {:.3f}%').format(stock_code_1, proportion_annual_1 * 100.00)
+print('\tMVP annua; proportion {}: {:.3f}%').format(stock_code_2, proportion_annual_2 * 100.00)
+>>>>>>> 47c0cfa36fea825d7d0c1eb6c2fc4c64b3f473ac
 print('\tMVP annual standard deviation: {:.3f}%').format(mvp_risk_annual * 100.00)
 print('\tMVP annual standard portfolio return: {:.3f}%').format(mvp_return_annual * 100.00)
 
@@ -143,7 +148,7 @@ w_2 = 1.0
 
 max_r = (w_1 * average_return_monthly_1 + w_2 * average_return_monthly_2 - risk_free_rate_monthly) / np.sqrt(w_1**2 * variance_monthly_1 + w_2**2 * variance_monthly_2 + 2 * w_1 * w_2 * covariance_monthly)
 max_w1 = 0.0
-max_w2 = 1
+max_w2 = 1.0
 
 for x in range(0, 10000):
     w_1 = w_1 + 0.0001
