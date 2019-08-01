@@ -8,6 +8,7 @@
 ### Packages used
 - python version: 2.7.15
 - pandas-datareader: 0.7.0
+- matplotlib: 2.2.4
 - pandas: 0.24.2
 - numpy: 1.16.4
 
@@ -33,7 +34,7 @@ Minimum Variance Portfolio:
         MVP monthly proportion XRX: 58.971%
         MVP monthly standard deviation: 15.260%
         MVP monthly standard portfolio return: 2.512%
-        
+
         (annual) MVP annual proportion COTY: 41.029%
         MVP annual proportion XRX: 58.971%
         MVP annual standard deviation: 52.864%
@@ -75,3 +76,6 @@ Case 3:
         (annual) Portfolio annual expected return: 84.727%
         Portfolio annual standard deviation: 88.665%
 ```
+
+##### Plot Shown:
+![Alt text](./pics/plot.png)

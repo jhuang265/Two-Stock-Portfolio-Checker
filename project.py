@@ -250,5 +250,5 @@ df.plot.scatter(x='Volatility', y='Returns', c='Sharpe Ratio', cmap='RdYlGn', ed
 
 plt.xlabel('Volatility (Std. Deviation)')
 plt.ylabel('Expected Returns')
-plt.title('Efficient Frontier')
+plt.title('Efficient Frontier (annual)')
 plt.show()
