@@ -30,12 +30,14 @@ __Note__: we have both ouput for monthly and annual, but they are all calculated
 #### Output:
 ```
 Minimum Variance Portfolio: 
-        (monthly) MVP monthly proportion COTY: 41.029%
+        (monthly)
+        MVP monthly proportion COTY: 41.029%
         MVP monthly proportion XRX: 58.971%
         MVP monthly standard deviation: 15.260%
         MVP monthly standard portfolio return: 2.512%
 
-        (annual) MVP annual proportion COTY: 41.029%
+        (annual)
+        MVP annual proportion COTY: 41.029%
         MVP annual proportion XRX: 58.971%
         MVP annual standard deviation: 52.864%
         MVP annual standard portfolio return: 36.788%
@@ -44,13 +46,15 @@ Case 1:
         Given-Proportion invested in risk-free asset: 0%
         Given-Proportion invested in market portfolio: 100%
 
-        (monthly) Maximum Sharpe ratio: 0.215
+        (monthly)
+        Maximum Sharpe ratio: 0.215
         Market portfolio proportion COTY: 0.000%
         Market portfolio proportion XRX: 100.000%
         Market monthly portfolio expected return: 3.839%
         Market monthly portfolio standard deviation: 17.064%
 
-        (annual) Maximum Sharpe ratio: 0.933
+        (annual)
+        Maximum Sharpe ratio: 0.933
         Market portfolio proportion COTY: 0.000%
         Market portfolio proportion XRX: 100.000%
         Market annual portfolio expected return: 57.151%
@@ -60,20 +64,24 @@ Case 2:
         Given-Proportion invested in risk-free asset: 50%
         Given-Proportion invested in market portfolio: 50%
 
-        (monthly) Portfolio monthly expected return: 2.002%
+        (monthly)
+        Portfolio monthly expected return: 2.002%
         Portfolio monthly standard deviation: 8.532%
 
-        (annual) Portfolio annual expected return: 29.576%
+        (annual)
+        Portfolio annual expected return: 29.576%
         Portfolio annual standard deviation: 29.555%
 
 Case 3: 
         Given-Proportion invested in risk-free asset: -50%
         Given-Proportion invested in market portfolio: 150%
 
-        (monthly) Portfolio monthly expected return: 5.676%
+        (monthly)
+        Portfolio monthly expected return: 5.676%
         Portfolio monthly standard deviation: 25.595%
 
-        (annual) Portfolio annual expected return: 84.727%
+        (annual)
+        Portfolio annual expected return: 84.727%
         Portfolio annual standard deviation: 88.665%
 ```
 
