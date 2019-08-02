@@ -223,7 +223,7 @@ print ('\t(annual)\n\tPortfolio annual expected return: {:.3f}%').format((-0.5 *
 print ('\tPortfolio annual standard deviation: {:.3f}%').format((1.5 * max_risk_annual) * 100.00)
 
 
-weights_0 = np.array(list(range(0, 11)))/10.0
+weights_0 = np.array(list(range(0, 51)))/50.0
 weights_1 = 1 - weights_0
 weights = np.array([weights_0, weights_1]).T
 
