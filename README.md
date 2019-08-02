@@ -98,7 +98,7 @@ Stocks Used:
 - ZAG.TO
 - SBUX
 
-```bash
+```
 Stock code name: AGG
 Enter a code for the next stock: BND   
 Enter a code for the next stock: XBB.TO
