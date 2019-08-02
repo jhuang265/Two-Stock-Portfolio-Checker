@@ -98,6 +98,15 @@ Stocks Used:
 - ZAG.TO
 - SBUX
 
+```bash
+Stock code name: AGG
+Enter a code for the next stock: BND   
+Enter a code for the next stock: XBB.TO
+Enter a code for the next stock: ZAG.TO
+Enter a code for the next stock: SBUX
+Enter a code for the next stock: done
+```
+
 ```
 Stock 0 (AGG):
 	Return: 7.50139510466%

@@ -40,17 +40,6 @@ while True:
         continue
     break
 
-risk_free_string = raw_input("Risk Free Rate (Annual) (in percentage form ex. 5.25%): ")
-while True:
-    try:
-        # Parse for percentage
-        risk_free_rate = float(re.findall(r'(\d+(\.\d+)?%)', risk_free_string)[0][0].rstrip("%"))/100.0000
-    except IndexError:
-        # Ask again if not valid
-        risk_free_string = raw_input("Please enter a percentage value of the form X.XX%: ")
-        continue
-    break
-
 # print all_returns_monthly
 
 # Get monthly risk free rate
