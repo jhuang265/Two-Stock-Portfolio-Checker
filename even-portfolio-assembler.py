@@ -42,9 +42,6 @@ while True:
 
 # print all_returns_monthly
 
-# Get monthly risk free rate
-risk_free_rate_monthly = np.power([risk_free_rate+1], [1.0/12.0])[0] -1
-
 returns_monthly = []
 for stock in all_returns_monthly:
     returns_monthly.append(stock.pct_change()[1:])
