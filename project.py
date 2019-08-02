@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 # Set dates
 start = datetime.datetime(2018, 6, 1)
-end = datetime.datetime(2019, 6, 1)
+end = datetime.datetime(2019, 6, 3)
 
 # Get Stock Codes and Risk Free Rate
 stock_1 = []

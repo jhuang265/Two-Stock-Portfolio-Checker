@@ -79,3 +79,43 @@ Case 3:
 
 ##### Plot Shown:
 ![Alt text](./pics/plot.png)
+
+### BONUS:
+
+Stocks Used:
+
+- AGG
+- BND
+- XBB.TO
+- ZAG.TO
+- SBUX
+
+```
+Stock 0 (AGG):
+	Return: 7.50139510466%
+	Variance: 0.00137003782769
+	Standard Deviation: 3.70140220415%
+
+Stock 1 (BND):
+	Return: 7.31562925762%
+	Variance: 0.00126738385767
+	Standard Deviation: 3.56003350781%
+
+Stock 2 (XBB.TO):
+	Return: 6.96220635499%
+	Variance: 0.00147542539242
+	Standard Deviation: 3.84112664776%
+
+Stock 3 (ZAG.TO):
+	Return: 6.31596514652%
+	Variance: 0.00157260140676
+	Standard Deviation: 3.96560387174%
+
+Stock 4 (SBUX):
+	Return: 67.119649212%
+	Variance: 0.027628276071
+	Standard Deviation: 16.6217556446%
+
+Portfolio Risk: 3.84773303872%
+Portfolio Return: 19.0429690152%
+```

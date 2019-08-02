@@ -105,7 +105,7 @@ portfolio_risk = np.sqrt(portfolio_risk)
 
 for i in  range(0, counter):
     print ''
-    print("Stock {}:").format(i)
+    print("Stock {}:").format(i+1)
     print("\tReturn: {}%").format(returns_annual[i]*100.00)
     print("\tVariance: {}").format(covariances_annual[i][i])
     print("\tStandard Deviation: {}%").format(np.sqrt(covariances_annual[i][i])*100.00)
